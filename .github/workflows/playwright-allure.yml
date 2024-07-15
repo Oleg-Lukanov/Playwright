@@ -42,12 +42,12 @@ jobs:
       - name: Generate Allure report
         run: |
           npx allure generate ./allure-results ./previous-allure-results --clean
-          
+
       - name: Copy Allure results to allure-results branch
         run: |
           git config --global user.email "oleeluk@gmail.com"
           git config --global user.name "Oleh_Lukianchuk"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
           git fetch origin
           git checkout -B allure-results
           cp -R ./allure-report/* .
@@ -58,7 +58,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
           publish_dir: ./allure-report
           publish_branch: gh-pages
 
