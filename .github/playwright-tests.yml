@@ -1,0 +1,58 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Generate Allure report
+        run: |
+          npx allure generate ./allure-results --clean
+          npx allure open ./allure-report
+
+      - name: Copy Allure results to allure-results branch
+        run: |
+          git config --global user.email "oleeluk@gmail.com"
+          git config --global user.name "Oleh_Lukianchuk"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git fetch origin
+          git checkout -B allure-results
+          cp -R ./allure-report/* .
+          git add .
+          git commit -m "Update Allure report"
+          git push origin allure-results --force
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          publish_branch: gh-pages
+
+      - name: Update GitHub Pages link in README
+        run: |
+          REPORT_LINK="https://${{ github.Oleg-Lukanov }}.github.io/${{ github.Playwright_FrameWork }}"
+          sed -i "s|Allure Report|Allure Report: [View Report](${REPORT_LINK})|" README.md
+          git add README.md
+          git commit -m "Update Allure Report link in README"
+          git push origin main
