@@ -1,6 +1,12 @@
 node_modules/
 /test-results/
-/playwright-report/
 /blob-report/
 /playwright/.cache/
 allure-results/
+
+# IDE
+.idea
+.vscode
+
+# MacOS
+.DS_Store
