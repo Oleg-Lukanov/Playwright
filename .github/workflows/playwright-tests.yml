@@ -17,14 +17,14 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps --force
     - name: Run Playwright tests
       run: npx playwright test
 
       - name: Generate Allure report
         run: |
-          npx allure generate ./allure-results --clean
-          npx allure open ./allure-report
+          run: npx allure generate ./allure-results ./previous-allure-results --clean
+
 
       - name: Copy Allure results to allure-results branch
         run: |
