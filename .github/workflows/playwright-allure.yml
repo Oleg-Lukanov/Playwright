@@ -42,8 +42,7 @@ jobs:
       - name: Generate Allure report
         run: |
           npx allure generate ./allure-results ./previous-allure-results --clean
-          npx allure open ./allure-report
-
+          
       - name: Copy Allure results to allure-results branch
         run: |
           git config --global user.email "oleeluk@gmail.com"
