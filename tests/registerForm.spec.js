@@ -71,7 +71,7 @@ test.describe('User', () => {
         await formPage.assertError();
     });
 
-    test('should properly handle "Hide my email?" checkbox', async ({ page }) => {
+    test('should successfully register with the checkbox "Hide my email address" checked', async ({ page }) => {
         const randomLogin = getRandomString(10);
         const randomEmail = getRandomEmail();
         
@@ -88,7 +88,7 @@ test.describe('User', () => {
         await formPage.assertSuccess();
     });
 
-    test('should properly select drop-down options', async ({ page }) => {
+    test('should successfully register with a randomly selected language in the "Language" dropdown list', async ({ page }) => {
         const randomLogin = getRandomString(10);
         const randomEmail = getRandomEmail();
         
