@@ -43,7 +43,7 @@ jobs:
         if: always()
         uses: peaceiris/actions-gh-pages@v2
         with:
-          personal_token: ${{ secrets.PAT_TOKEN }}
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-report
 
@@ -56,3 +56,7 @@ jobs:
           git add allure-report
           git commit -m "Add Allure report"
           git push origin report --force
+
+      - name: Debug Info
+        run: env
+
