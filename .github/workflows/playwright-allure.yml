@@ -46,7 +46,7 @@ jobs:
       - name: Copy Allure results to allure-results branch
         run: |
           git config --global user.email "oleeluk@gmail.com"
-          git config --global user.name "Oleh_Lukianchuk"
+          git config --global user.name "Oleh Lukianchuk"
           git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
           git fetch origin
           git checkout -B allure-results
