@@ -1,0 +1,46 @@
+name: Playwright Tests
+
+on: [push, pull_request]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run Playwright Tests
+      run: npx playwright test
+
+    - name: Copy Allure results
+      run: |
+        mkdir -p allure-results
+        cp -r playwright-report/* allure-results
+
+    - name: Generate Allure Report
+      run: |
+        npx allure generate allure-results --clean -o allure-report
+        echo "allure-report" >> .gitignore
+
+    - name: Push Allure Report to gh-pages branch
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        git commit -m 'Generate Allure report'
+        git push -f origin HEAD:gh-pages
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./allure-report
