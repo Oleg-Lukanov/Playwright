@@ -13,9 +13,16 @@ jobs:
     name: Generate Allure Report
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Get Allure history
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Playwright Tests
+        run: npx playwright test
+
+      - name: Get Allure History
         uses: actions/checkout@v2
         if: always()
         continue-on-error: true
@@ -23,18 +30,26 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Allure Report action from marketplace
-        uses: simple-elf/allure-report-action@master
-        if: always()
-        with:
-          allure_results: allure-results
-          allure_history: allure-history
-          keep_reports: 20
+      - name: Copy Allure Results
+        run: mkdir -p allure-history && cp -r allure-results/* allure-history/
 
-      - name: Deploy report to Github Pages
+      - name: Generate Allure Report
+        run: npx allure generate allure-history --clean -o allure-report
+
+      - name: Deploy Report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v2
-        env:
-          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: allure-history
+        with:
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
+
+      - name: Push Report to Other Branch
+        if: always()
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git checkout -b report
+          git add allure-report
+          git commit -m "Add Allure report"
+          git push origin report --force
