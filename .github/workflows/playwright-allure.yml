@@ -47,7 +47,7 @@ jobs:
         run: |
           git config --global user.email "oleeluk@gmail.com"
           git config --global user.name "Oleh Lukianchuk"
-          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.playwright-framework }}
           git fetch origin
           git checkout -B allure-results
           cp -R ./allure-report/* .
