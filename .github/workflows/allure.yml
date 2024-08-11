@@ -53,7 +53,15 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git checkout -b report
-          git add allure-report
+          git add -f allure-report
           git commit -m "Add Allure report"
           git push origin report --force
+      
+      - name: Update GitHub Pages link in README
+        run: |
+            REPORT_LINK="https://${{ github.Oleg-Lukanov }}.github.io/${{ github.Playwright-framework }}"
+            sed -i "s|Allure Report|Allure Report: [View Report](${REPORT_LINK})|" README.md
+            git add README.md
+            git commit -m "Update Allure Report link in README"
+            git push origin main
 
