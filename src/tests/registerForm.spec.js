@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import RegisterFormPage from '../page-objects/RegisterFormPage';
-import { getRandomString, getRandomEmail } from '../helper/utils';
+import RegisterFormPage from '../../page-objects/RegisterFormPage';
+import { getRandomString, getRandomEmail } from '../../helper/utils';
 
 test.describe('User', () => {
     let formPage;

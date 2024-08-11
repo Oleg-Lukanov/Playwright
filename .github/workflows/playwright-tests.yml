@@ -21,13 +21,13 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
 
-      - name: Generate Allure report
-        run: |
+    - name: Generate Allure report
+      run: |
           run: npx allure generate ./allure-results ./previous-allure-results --clean
 
 
-      - name: Copy Allure results to allure-results branch
-        run: |
+    - name: Copy Allure results to allure-results branch
+      run: |
           git config --global user.email "oleeluk@gmail.com"
           git config --global user.name "Oleh_Lukianchuk"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
@@ -38,15 +38,15 @@ jobs:
           git commit -m "Update Allure report"
           git push origin allure-results
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
           publish_branch: gh-pages
 
-      - name: Update GitHub Pages link in README
-        run: |
+    - name: Update GitHub Pages link in README
+      run: |
           REPORT_LINK="https://${{ github.Oleg-Lukanov }}.github.io/${{ github.Playwright_FrameWork }}"
           sed -i "s|Allure Report|Allure Report: [View Report](${REPORT_LINK})|" README.md
           git add README.md

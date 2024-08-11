@@ -1,8 +1,11 @@
+allure-report/
 node_modules/
 /test-results/
 /blob-report/
 /playwright/.cache/
 allure-results/
+playwright-report/
+
 
 # IDE
 .idea

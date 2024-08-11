@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import BasePage from "./BasePage";
 
 const loginField = '#user_login';
 const passwordField = '#user_password';
@@ -15,8 +16,9 @@ const sendButton = 'input[name="commit"]';
 const successMessage = '#flash_notice';
 const errorMessage = '#errorExplanation';
 
-class RegisterFormPage {
+class RegisterFormPage extends BasePage {
     constructor(page) {
+        super(page);
         this.page = page;
     }
 
@@ -24,34 +26,84 @@ class RegisterFormPage {
         await this.page.goto('/account/register'); 
     }
 
-    async fillRequiredFields({ login, password, confirmation, firstName, lastName, email }) {
+    // Methods for individual fields (Required)
+    async fillLogin(login) {
         await this.page.locator(loginField).fill(login);
+    }
+
+    async fillPassword(password) {
         await this.page.locator(passwordField).fill(password);
+    }
+
+    async fillConfirmation(confirmation) {
         await this.page.locator(confirmPasswordField).fill(confirmation);
+    }
+
+    async fillFirstName(firstName) {
         await this.page.locator(firstNameField).fill(firstName);
+    }
+
+    async fillLastName(lastName) {
         await this.page.locator(lastNameField).fill(lastName);
+    }
+
+    async fillEmail(email) {
         await this.page.locator(emailField).fill(email);
     }
 
-    async fillOptionalFields({ hideEmail = true, language = null, organization = null, location = null, ircNickname = null }) {
-        if (hideEmail) {
-            await this.page.locator(hideEmailCheckbox).check();
+    // Methods for individual fields (Optional)
+    async toggleHideEmail(hide = true) {
+        const checkbox = this.page.locator(hideEmailCheckbox);
+        if (hide) {
+            await checkbox.check();
         } else {
-            await this.page.locator(hideEmailCheckbox).uncheck();
-        }
-        if (language) {
-            await this.page.locator(languageDropdown).selectOption(language);
-        }
-        if (organization) {
-            await this.page.locator(organizationField).fill(organization);
-        }
-        if (location) {
-            await this.page.locator(locationField).fill(location);
-        }
-        if (ircNickname) {
-            await this.page.locator(ircNicknameField).fill(ircNickname);
+            await checkbox.uncheck();
         }
     }
+
+    async selectLanguage(language) {
+        await this.page.locator(languageDropdown).selectOption(language);
+    }
+
+    async fillOrganization(organization) {
+        await this.page.locator(organizationField).fill(organization);
+    }
+
+    async fillLocation(location) {
+        await this.page.locator(locationField).fill(location);
+    }
+
+    async fillIrcNickname(ircNickname) {
+        await this.page.locator(ircNicknameField).fill(ircNickname);
+    }
+
+    // Methods to fill all required fields at once
+    async fillRequiredFields({ login, password, confirmation, firstName, lastName, email }) {
+        await this.fillLogin(login);
+        await this.fillPassword(password);
+        await this.fillConfirmation(confirmation);
+        await this.fillFirstName(firstName);
+        await this.fillLastName(lastName);
+        await this.fillEmail(email);
+    }
+
+    // Methods to fill all optional fields at once
+    async fillOptionalFields({ hideEmail = true, language = null, organization = null, location = null, ircNickname = null }) {
+        await this.toggleHideEmail(hideEmail);
+        if (language) {
+            await this.selectLanguage(language);
+        }
+        if (organization) {
+            await this.fillOrganization(organization);
+        }
+        if (location) {
+            await this.fillLocation(location);
+        }
+        if (ircNickname) {
+            await this.fillIrcNickname(ircNickname);
+        }
+    }
+
 
     async submit() {
         await this.page.locator(sendButton).click();
