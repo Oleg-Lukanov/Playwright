@@ -13,7 +13,7 @@
     "test:chromium": "npx playwright test --project=chromium",
     "test:webkit": "npx playwright test --project=webkit",
     "test:allure": "npx playwright test --reporter=allure-playwright",
-    "allure:generate": "npx allure generate ./allure-results --clean",
+    "allure:generate": "allure generate ./allure-results --clean",
     "allure:open": "allure open"
   }
 }
