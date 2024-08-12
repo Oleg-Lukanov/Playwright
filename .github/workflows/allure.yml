@@ -59,7 +59,7 @@ jobs:
       
       - name: Update GitHub Pages link in README
         run: |
-            REPORT_LINK="https://${{ github.Oleg-Lukanov }}.github.io/${{ github.Playwright-framework }}"
+            REPORT_LINK="https://${{ github.Oleg-Lukanov }}.github.io/${{ github.Playwright_framework }}"
             sed -i "s|Allure Report|Allure Report: [View Report](${REPORT_LINK})|" README.md
             git add README.md
             git commit -m "Update Allure Report link in README"
